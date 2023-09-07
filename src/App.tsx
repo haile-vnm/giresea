@@ -1,6 +1,6 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Button } from 'antd';
 
 export default function App () {
   return (
@@ -9,15 +9,13 @@ export default function App () {
         <img alt="logo" className="App-logo" src={logo} />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          rel="noopener noreferrer"
-          target="_blank"
+        </p> <Button
+          href="https://ant.design/"
+          size="large"
+          type="primary"
         >
-          Learn React
-        </a>
+          Learn Ant Design
+        </Button>
       </header>
     </div>
   );
