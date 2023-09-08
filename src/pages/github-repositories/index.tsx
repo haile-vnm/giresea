@@ -1,9 +1,11 @@
 import DebounceSearchInput from '../../components/debounce-search-input';
 import GitHubRepositories from '../../components/github-repositories';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useReactRepositorySearch } from '../../integrations/github/repository';
 import UnknownSizePagination from '../../components/unknown-size-pagination';
 import styled from 'styled-components';
+import If from '../../components/if';
+import { message, Spin } from 'antd';
 
 const PageWrapper = styled.div`
   padding: 2rem;
@@ -37,6 +39,7 @@ export default function GitHubRepositoriesPage() {
   const [searchName, setSearchName] = useState('');
   const [page, setPage] = useState({});
   const { data, error, loading } = useReactRepositorySearch({ ...page, search: searchName });
+  const [messageApi, contextHolder] = message.useMessage();
 
   const loadNextPage = (token: string) => {
     setPage({ after: token });
@@ -46,17 +49,38 @@ export default function GitHubRepositoriesPage() {
     setPage({ before: token });
   };
 
+  const showError = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
+  useEffect(() => {
+    if (error?.message) {
+      showError(error?.message);
+    }
+  }, [error]);
+
   return (
-    <PageWrapper>
-      <HeaderWrapper>
-        <PageHeader>
-          <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
-          <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
-        </PageHeader>
-      </HeaderWrapper>
-      <ContentWrapper>
-        <GitHubRepositories items={data?.repos || []}></GitHubRepositories>
-      </ContentWrapper>
-    </PageWrapper>
+    <>
+      {contextHolder}
+      <PageWrapper>
+        <HeaderWrapper>
+          <PageHeader>
+            <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
+            <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
+          </PageHeader>
+        </HeaderWrapper>
+        <ContentWrapper>
+          <If
+            condition={!loading}
+            else={<Spin size="large" />}
+          >
+            <GitHubRepositories items={data?.repos || []}></GitHubRepositories>
+          </If>
+        </ContentWrapper>
+      </PageWrapper>
+    </>
   );
 }
