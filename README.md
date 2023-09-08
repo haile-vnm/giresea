@@ -72,7 +72,7 @@ docker build -t giresea .
 ### Run the Docker container
 
 ```shell
-docker run --mount type=bind,src=[your-absolute-project-path],dst=/app --expose 3000 -i giresea
+docker run -v ${PWD}:/app -p 3000:3000 -i giresea
 ```
 
 ## Test the app 🚀
