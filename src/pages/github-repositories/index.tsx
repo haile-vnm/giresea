@@ -6,6 +6,7 @@ import UnknownSizePagination from '../../components/unknown-size-pagination';
 import styled from 'styled-components';
 import If from '../../components/if';
 import { message, Spin } from 'antd';
+import TokenManagement from '../../components/token-management';
 
 const PageWrapper = styled.div`
   padding: 2rem;
@@ -20,6 +21,11 @@ const HeaderWrapper = styled.div`
   padding-top: 1rem;
 `;
 
+const HeaderInputWrapper = styled.div`
+  margin-bottom: .5rem;
+  display: flex;
+`;
+
 const ContentWrapper = styled.div`
   padding-top: 64px; // header height
 `;
@@ -27,12 +33,12 @@ const ContentWrapper = styled.div`
 const PageHeader = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   margin: auto;
   margin-bottom: 1rem;
-  width: 50%;
-  max-width: 500px;
-  min-width: 240px;
+  width: 80%;
+  max-width: 800px;
+  min-width: 500px;
 `;
 
 export default function GitHubRepositoriesPage() {
@@ -68,7 +74,10 @@ export default function GitHubRepositoriesPage() {
       <PageWrapper>
         <HeaderWrapper>
           <PageHeader>
-            <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
+            <HeaderInputWrapper>
+              <TokenManagement></TokenManagement>
+              <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
+            </HeaderInputWrapper>
             <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
           </PageHeader>
         </HeaderWrapper>
