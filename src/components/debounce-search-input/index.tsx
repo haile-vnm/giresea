@@ -24,7 +24,6 @@ export default function DebounceSearchInput({ time, commit }: DebounceInputProps
     <Search
       onChange={onSearch}
       placeholder="Search by repository name"
-      style={{ width: '50%' }}
       value={value}
     />
   );
