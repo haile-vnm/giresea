@@ -24,7 +24,13 @@ interface RepositorySearchResponse {
 
 const query = gql`
 query Repositories($query: String!, $first: Int, $after: String, $before: String) {
-  search(type: REPOSITORY, query: $query, first: $first, after: $after, before: $before) {
+  search(
+    type: REPOSITORY
+    query: $query
+    first: $first
+    after: $after
+    before: $before
+  ) {
     repos: edges {
       repo: node {
         ... on Repository {
@@ -32,9 +38,8 @@ query Repositories($query: String!, $first: Int, $after: String, $before: String
           name
           createdAt
           updatedAt
-          forks {
-            totalCount
-          }
+          forkCount
+          stargazerCount
         }
       }
     }
