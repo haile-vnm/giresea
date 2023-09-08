@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { Repository } from './types/repository';
 import { client } from './server';
+import { DEFAULT_PAGINATION_ITEMS } from '../../lib/constant';
 
 const query = gql`
 query Repositories($query: String!, $first: Int, $after: String, $before: String) {
@@ -38,17 +39,28 @@ interface RepositorySearchResponse {
       endCursor: string;
       hasNextPage: boolean;
     };
-    repos: Repository[];
+    repos: {
+      repo: Repository
+    }[];
   }
 }
 
 export const useReactRepositorySearch = (queryData: RepositorySearchParams) => {
   const { data, error, loading } =
-    useQuery<RepositorySearchResponse>(query, { variables: { ...queryData, query: 'is:public topic:react sort:updated' }, client });
+    useQuery<RepositorySearchResponse, RepositorySearchParams & { query: string }>(
+      query,
+      {
+        variables: {
+          ...queryData,
+          first: queryData.first || DEFAULT_PAGINATION_ITEMS,
+          query: 'is:public topic:react sort:updated'
+        },
+        client
+      });
 
   return {
     error,
     loading,
-    data: data?.search
+    data: { ...data?.search, repos: data?.search.repos.map(({ repo }) => repo) }
   };
 };
