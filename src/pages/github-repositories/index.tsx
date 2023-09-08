@@ -1,8 +1,7 @@
-import { Avatar, List, Pagination } from 'antd';
-import { Repository } from '../../integrations/github/types/repository';
-import DebounceInput from '../../components/debounce-input';
+import { Pagination } from 'antd';
+import DebounceSearchInput from '../../components/debounce-search-input';
 import GitHubRepositories from '../../components/github-repositories';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useReactRepositorySearch } from '../../integrations/github/repository';
 
 export default function GitHubRepositoriesPage() {
@@ -16,7 +15,7 @@ export default function GitHubRepositoriesPage() {
 
   return (
     <>
-      <DebounceInput commit={(value) => setSearchName(value)}></DebounceInput>
+      <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
       <GitHubRepositories items={data?.repos || []}></GitHubRepositories>
       <Pagination hideOnSinglePage={true} onChange={paginate} total={50}/>
     </>
