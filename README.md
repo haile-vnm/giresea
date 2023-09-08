@@ -1,46 +1,84 @@
-# Getting Started with Create React App
+# Giresea
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An application that helps users search and list all public React repositories on GitHub.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+```
+├── public
+│   ├── index.html
+│   └── ...
+├── src
+│   ├── components
+│   │   ├── ...
+│   │   └── ...
+│   ├── integrations
+│   │   ├── github
+│   │   │   ├── types
+│   │   │   ├── server.ts
+│   │   │   └── ...
+│   │   └── ...
+│   ├── lib
+│   │   ├── constant.ts
+│   │   ├── localstorage.ts
+│   │   └── ...
+│   ├── pages
+│   │   ├── ...
+│   │   └── ...
+│   ├── App.ts
+│   ├── index.ts
+│   └── ...
+├── .gitignore
+├── package.json
+├── Dockerfile
+├── ...
+└── README.md
+```
 
-### `yarn start`
+- `public`: This folder contains the public assets of this project, including the `index.html` file, which is the entry point of this application.
+- `src`: This folder contains the source code of this project.
+  - `components`: This folder contains reusable components used throughout this application.
+  - `integrations`: This folder contains service modules responsible for interacting with external services or APIs.
+    - `github`: This folder contains all the logic related to the GitHub service.
+      - `types`: This folder contains resource models related to the GitHub service.
+      - `server.ts`: This file contains the general instance that is used by all other files in this folder.
+  - `lib`: This folder contains reusable functions and objects used throughout this application.
+  - `pages`: This folder contains the individual pages or views of this application.
+  - `App.ts`: The root component that defines the overall structure of this application and handles routing.
+  - `index.ts`: The entry point of this application that renders the root component and mounts it to the DOM.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Clone the GitHub repository
 
-### `yarn test`
+```shell
+git clone git@github.com:haile-vnm/giresea.git
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Go to the project folder
 
-### `yarn build`
+Navigate to the `giresea` folder created by the previous command.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```shell
+cd giresea
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Build the Docker image
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```shell
+docker build -t giresea .
+```
 
-### `yarn eject`
+### Run the Docker container
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```shell
+docker run --mount type=bind,src=[your-absolute-project-path],dst=/app --expose 3000 -i giresea
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Test the app 🚀
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+After successfully building the services mentioned above, you can access the app via [`http://localhost:3000`](http://localhost:3000).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Then, enjoy every small moment!! 💃🕺
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Thank you! 🥳🥳🥳
