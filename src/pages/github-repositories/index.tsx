@@ -24,6 +24,11 @@ const HeaderWrapper = styled.div`
 const HeaderInputWrapper = styled.div`
   margin-bottom: .5rem;
   display: flex;
+  width: 100%;
+`;
+
+const TokenWrapper = styled.div`
+  margin-right: .5rem;
 `;
 
 const ContentWrapper = styled.div`
@@ -38,7 +43,7 @@ const PageHeader = styled.div`
   margin-bottom: 1rem;
   width: 80%;
   max-width: 800px;
-  min-width: 500px;
+  min-width: 400px;
 `;
 
 export default function GitHubRepositoriesPage() {
@@ -75,7 +80,9 @@ export default function GitHubRepositoriesPage() {
         <HeaderWrapper>
           <PageHeader>
             <HeaderInputWrapper>
-              <TokenManagement></TokenManagement>
+              <TokenWrapper>
+                <TokenManagement></TokenManagement>
+              </TokenWrapper>
               <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
             </HeaderInputWrapper>
             <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>

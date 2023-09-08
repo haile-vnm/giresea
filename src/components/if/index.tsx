@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactElement } from 'react';
 
 interface IfProps {
   condition: unknown;
-  children: ReactNode;
-  else?: ReactNode;
+  children: ReactElement;
+  else?: ReactElement;
 }
 export default function If({
   condition,
@@ -18,5 +18,5 @@ export default function If({
     return elseElement;
   }
 
-  return null;
+  return <></>;
 }

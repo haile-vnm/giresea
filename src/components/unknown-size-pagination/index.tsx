@@ -2,12 +2,12 @@ import { Pagination, PaginationProps } from 'antd';
 
 const PAGE_ITEMS = 10;
 const PAGE_SIZES = 3;
-const TOTAL_ITEMS = PAGE_SIZES * PAGE_ITEMS; 
+const TOTAL_ITEMS = PAGE_SIZES * PAGE_ITEMS;
 // pageIndex: 1 - 2 - 3
 const PAGE_INDEX = {
   first: 1,
   center: 2,
-  last: 3 
+  last: 3
 };
 
 interface PageInfo {
@@ -65,7 +65,7 @@ export default function UnknownSizePagination(props: UnknownSizePaginationProps)
   };
 
   if (!currentPage) {
-    return;
+    return <></>;
   }
 
   return (
