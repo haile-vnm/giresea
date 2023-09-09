@@ -6,11 +6,12 @@ import { USER_TYPING_TIME } from '../../lib/constant';
 const { Search } = Input;
 
 interface DebounceInputProps {
+  placeholder?: string;
   time?: number; // in milisecond
   commit?: (value: string) => void;
 }
 
-export default function DebounceSearchInput({ time, commit }: DebounceInputProps) {
+export default function DebounceSearchInput({ time, commit, placeholder }: DebounceInputProps) {
   const [value, setValue] = useState('');
   const debouncedValue = useDebounce(value, time || USER_TYPING_TIME);
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +24,7 @@ export default function DebounceSearchInput({ time, commit }: DebounceInputProps
   return (
     <Search
       onChange={onSearch}
-      placeholder="Search by repository name"
+      placeholder={placeholder}
       value={value}
     />
   );

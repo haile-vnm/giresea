@@ -84,7 +84,7 @@ export default function GitHubRepositoriesPage() {
               <TokenWrapper>
                 <TokenManagement></TokenManagement>
               </TokenWrapper>
-              <DebounceSearchInput commit={search}></DebounceSearchInput>
+              <DebounceSearchInput commit={search} placeholder="Search by repository name"></DebounceSearchInput>
             </HeaderInputWrapper>
             <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
           </PageHeader>
