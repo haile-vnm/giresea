@@ -5,7 +5,7 @@ import { useReactRepositorySearch } from '../../integrations/github/repository';
 import UnknownSizePagination from '../../components/unknown-size-pagination';
 import styled from 'styled-components';
 import If from '../../components/if';
-import { message, Spin } from 'antd';
+import { notification, Spin } from 'antd';
 import TokenManagement from '../../components/token-management';
 
 const PageWrapper = styled.div`
@@ -48,23 +48,24 @@ const PageHeader = styled.div`
 
 export default function GitHubRepositoriesPage() {
   const [searchName, setSearchName] = useState('');
-  const [page, setPage] = useState({});
+  const [page, setPage] = useState<{ after?: string; before?: string }>({});
   const { data, error, loading } = useReactRepositorySearch({ ...page, search: searchName });
-  const [messageApi, contextHolder] = message.useMessage();
+  const [api, contextHolder] = notification.useNotification();
 
+  const showError = (message: string) => {
+    api.error({
+      message: 'GitHub',
+      description: message,
+    });
+  };
+
+  const search = (value: string) => setSearchName(value);
   const loadNextPage = (token: string) => {
     setPage({ after: token });
   };
 
   const loadPrevPage = (token: string) => {
     setPage({ before: token });
-  };
-
-  const showError = (message: string) => {
-    messageApi.open({
-      type: 'error',
-      content: message,
-    });
   };
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function GitHubRepositoriesPage() {
               <TokenWrapper>
                 <TokenManagement></TokenManagement>
               </TokenWrapper>
-              <DebounceSearchInput commit={(value) => setSearchName(value)}></DebounceSearchInput>
+              <DebounceSearchInput commit={search}></DebounceSearchInput>
             </HeaderInputWrapper>
             <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
           </PageHeader>
