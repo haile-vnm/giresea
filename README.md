@@ -2,6 +2,8 @@
 
 An application that helps users search and list all public React repositories on GitHub.
 
+[Video Demo](https://youtu.be/R0L_b_cku2M)
+
 ## Project Structure
 
 ```
