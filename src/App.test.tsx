@@ -1,9 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('Make sure the app always renders at least one page', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const mainElement = screen.getByTestId('app-container');
+  expect(mainElement).not.toBeEmptyDOMElement();
 });
