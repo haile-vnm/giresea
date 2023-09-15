@@ -7,7 +7,7 @@ export default function GitHubRepositories({ items }: { items: Repository[] }) {
       dataSource={items}
       itemLayout="horizontal"
       renderItem={(item) => (
-        <List.Item key={item.name}>
+        <List.Item data-testid={item.name} key={item.name}>
           <List.Item.Meta
             // avatar={<Avatar src={item.avatar} />}
             description={<>{`🌟 ${item.stargazerCount || 0} - 🍴 ${item.forkCount || 0}`}</>}
