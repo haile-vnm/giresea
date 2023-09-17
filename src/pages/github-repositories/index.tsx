@@ -86,7 +86,10 @@ export default function GitHubRepositoriesPage() {
       return;
     }
 
-    showError('Please enter your personal token to start having great experience with Giresea 🚀');
+    api.info({
+      message: 'Authentication',
+      description: 'Please enter your personal token to start having great experience with Giresea 🚀'
+    });
   }, []);
 
   const refetchRepos = () => {
