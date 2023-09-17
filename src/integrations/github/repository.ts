@@ -1,7 +1,7 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import { Repository } from './types/repository';
-import { client } from './server';
 import { DEFAULT_PAGINATION_ITEMS } from '../../lib/constant';
+import { MockedResponse } from '@apollo/client/testing';
 
 interface RepositorySearchParams {
   search?: string;
@@ -16,9 +16,7 @@ interface RepositorySearchResponse {
       endCursor: string;
       hasNextPage: boolean;
     };
-    repos: {
-      repo: Repository
-    }[];
+    repos: Repository[];
   }
 }
 
@@ -31,16 +29,12 @@ query Repositories($query: String!, $first: Int, $after: String, $before: String
     after: $after
     before: $before
   ) {
-    repos: edges {
-      repo: node {
-        ... on Repository {
-          url
-          name
-          createdAt
-          updatedAt
-          forkCount
-          stargazerCount
-        }
+    repos: nodes {
+      ... on Repository {
+        url
+        name
+        forkCount
+        stargazerCount
       }
     }
     pageInfo {
@@ -50,25 +44,50 @@ query Repositories($query: String!, $first: Int, $after: String, $before: String
   }
 }`;
 
-export const useReactRepositorySearch = (queryData: RepositorySearchParams) => {
+const extractQueryVariables = (queryData: RepositorySearchParams) => {
   const { search } = queryData;
   const nameQuery = search ? `${search} in:name` : '';
-  const { data, error, loading } =
-    useQuery<RepositorySearchResponse, RepositorySearchParams & { query: string }>(
+
+  return {
+    ...queryData,
+    first: queryData.first || DEFAULT_PAGINATION_ITEMS,
+    query: `is:public ${nameQuery} topic:react sort:updated`
+  };
+};
+
+export const useLazyReactRepositorySearch = (queryData: RepositorySearchParams) => {
+  const [fetch, result] =
+    useLazyQuery<RepositorySearchResponse, RepositorySearchParams & { query: string }>(
       query,
       {
-        variables: {
-          ...queryData,
-          first: queryData.first || DEFAULT_PAGINATION_ITEMS,
-          query: `is:public ${nameQuery} topic:react sort:updated`
-        },
-        client
+        variables: extractQueryVariables(queryData)
       }
     );
 
   return {
-    error,
-    loading,
-    data: { ...data?.search, repos: data?.search.repos.map(({ repo }) => repo) }
+    fetch,
+    result: {
+      ...result,
+      data: { ...result.data?.search, repos: result.data?.search.repos }
+    }
+  };
+};
+
+export const mockRepositorySearch = (
+  queryData: RepositorySearchParams,
+  response?: RepositorySearchResponse['search'],
+  error?: Error
+): MockedResponse<RepositorySearchResponse> => {
+  return {
+    request: {
+      query,
+      variables: extractQueryVariables(queryData)
+    },
+    ...response && {
+      result: {
+        data: { search: { ...response, repos: response.repos.map(repo => ({ ...repo, __typename: 'Repository' }))} }
+      }
+    },
+    ...error && { error }
   };
 };

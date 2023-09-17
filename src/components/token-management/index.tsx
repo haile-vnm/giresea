@@ -4,7 +4,10 @@ import { getField, setField } from '../../lib/localstorage';
 import If from '../if';
 import { LockFilled } from '@ant-design/icons';
 
-export default function TokenManagement() {
+interface TokenManagementProps {
+  onSave?: () => void;
+}
+export default function TokenManagement({ onSave }: TokenManagementProps) {
   const [token, setToken] = useState('');
   const [show, setShow] = useState(false);
 
@@ -23,6 +26,7 @@ export default function TokenManagement() {
 
   const saveToken = () => {
     setField('github-personal-token', token);
+    onSave && onSave();
     hideModal();
   };
 

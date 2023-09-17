@@ -1,12 +1,13 @@
 import DebounceSearchInput from '../../components/debounce-search-input';
 import GitHubRepositories from '../../components/github-repositories';
 import { useEffect, useState } from 'react';
-import { useReactRepositorySearch } from '../../integrations/github/repository';
+import { useLazyReactRepositorySearch } from '../../integrations/github/repository';
 import UnknownSizePagination from '../../components/unknown-size-pagination';
 import styled from 'styled-components';
 import If from '../../components/if';
 import { notification, Spin } from 'antd';
 import TokenManagement from '../../components/token-management';
+import { getField } from '../../lib/localstorage';
 
 const PageWrapper = styled.div`
   padding: 2rem;
@@ -49,7 +50,10 @@ const PageHeader = styled.div`
 export default function GitHubRepositoriesPage() {
   const [searchName, setSearchName] = useState('');
   const [page, setPage] = useState<{ after?: string; before?: string }>({});
-  const { data, error, loading } = useReactRepositorySearch({ ...page, search: searchName });
+  const {
+    fetch: fetchRepos,
+    result: { data, error, loading, refetch }
+  } = useLazyReactRepositorySearch({ ...page, search: searchName });
   const [api, contextHolder] = notification.useNotification();
 
   const showError = (message: string) => {
@@ -62,10 +66,12 @@ export default function GitHubRepositoriesPage() {
   const search = (value: string) => setSearchName(value);
   const loadNextPage = (token: string) => {
     setPage({ after: token });
+    // fetchRepos();
   };
 
   const loadPrevPage = (token: string) => {
     setPage({ before: token });
+    // fetchRepos();
   };
 
   useEffect(() => {
@@ -73,6 +79,19 @@ export default function GitHubRepositoriesPage() {
       showError(error?.message);
     }
   }, [error]);
+
+  useEffect(() => {
+    if (getField('github-personal-token')) {
+      fetchRepos();
+      return;
+    }
+
+    showError('Please enter your personal token to start having great experience with Giresea 🚀');
+  }, []);
+
+  const refetchRepos = () => {
+    refetch();
+  };
 
   return (
     <>
@@ -82,7 +101,7 @@ export default function GitHubRepositoriesPage() {
           <PageHeader>
             <HeaderInputWrapper>
               <TokenWrapper>
-                <TokenManagement></TokenManagement>
+                <TokenManagement onSave={refetchRepos}></TokenManagement>
               </TokenWrapper>
               <DebounceSearchInput commit={search} placeholder="Search by repository name"></DebounceSearchInput>
             </HeaderInputWrapper>
@@ -94,7 +113,7 @@ export default function GitHubRepositoriesPage() {
             condition={!loading}
             else={<Spin size="large" />}
           >
-            <GitHubRepositories items={data?.repos || []}></GitHubRepositories>
+            <GitHubRepositories items={error ? [] : (data?.repos || [])}></GitHubRepositories>
           </If>
         </ContentWrapper>
       </PageWrapper>
