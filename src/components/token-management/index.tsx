@@ -5,7 +5,7 @@ import If from '../if';
 import { LockFilled } from '@ant-design/icons';
 
 interface TokenManagementProps {
-  onSave?: () => void;
+  onSave?: (value: string) => void;
 }
 export default function TokenManagement({ onSave }: TokenManagementProps) {
   const [token, setToken] = useState('');
@@ -26,7 +26,7 @@ export default function TokenManagement({ onSave }: TokenManagementProps) {
 
   const saveToken = () => {
     setField('github-personal-token', token);
-    onSave && onSave();
+    onSave && onSave(token);
     hideModal();
   };
 
@@ -46,7 +46,7 @@ export default function TokenManagement({ onSave }: TokenManagementProps) {
       </Button>
       <If condition={show}>
         <Modal
-          cancelText="Close"
+          cancelText="Discard"
           okText="Save"
           onCancel={cancel}
           onOk={saveToken}
