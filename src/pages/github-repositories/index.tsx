@@ -66,12 +66,10 @@ export default function GitHubRepositoriesPage() {
   const search = (value: string) => setSearchName(value);
   const loadNextPage = (token: string) => {
     setPage({ after: token });
-    // fetchRepos();
   };
 
   const loadPrevPage = (token: string) => {
     setPage({ before: token });
-    // fetchRepos();
   };
 
   useEffect(() => {
@@ -92,8 +90,10 @@ export default function GitHubRepositoriesPage() {
     });
   }, []);
 
-  const refetchRepos = () => {
-    refetch();
+  const onTokenChanges = (token: string) => {
+    if (token) {
+      refetch();
+    }
   };
 
   return (
@@ -104,7 +104,7 @@ export default function GitHubRepositoriesPage() {
           <PageHeader>
             <HeaderInputWrapper>
               <TokenWrapper>
-                <TokenManagement onSave={refetchRepos}></TokenManagement>
+                <TokenManagement onSave={onTokenChanges}></TokenManagement>
               </TokenWrapper>
               <DebounceSearchInput commit={search} placeholder="Search by repository name"></DebounceSearchInput>
             </HeaderInputWrapper>
