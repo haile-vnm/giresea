@@ -33,7 +33,7 @@ describe('Presence repositories', () => {
   test('should render name, star, folk count on each item', () => {
     const firstRepository = repositories[0];
 
-    const firstRepositoryElement = screen.getByTestId(firstRepository.name);
+    const firstRepositoryElement = screen.getByTestId(firstRepository.url);
     const nameElement = getByRole(firstRepositoryElement, 'link', { name: firstRepository.name });
     const descElement = getByText(firstRepositoryElement, new RegExp(`${firstRepository.stargazerCount}.*${firstRepository.forkCount}`));
 
@@ -45,7 +45,7 @@ describe('Presence repositories', () => {
 
   test('should render enough provided items', () => {
     repositories.forEach(repository => {
-      expect(screen.getByTestId(repository.name)).toBeInTheDocument();
+      expect(screen.getByTestId(repository.url)).toBeInTheDocument();
     });
   });
 });

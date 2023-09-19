@@ -1,9 +1,9 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 
 interface IfProps {
   condition: unknown;
-  children: ReactElement;
-  else?: ReactElement;
+  children: ReactNode;
+  else?: ReactNode;
 }
 export default function If({
   condition,
