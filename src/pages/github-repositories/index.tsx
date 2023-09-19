@@ -9,17 +9,14 @@ import { notification, Spin } from 'antd';
 import TokenManagement from '../../components/token-management';
 import { getField } from '../../lib/localstorage';
 
-const PageWrapper = styled.div`
-  padding: 2rem;
-`;
-
 const HeaderWrapper = styled.div`
   background-color: white;
   width: 100%;
   position: fixed;
   top: 0;
   z-index: 2;
-  padding-top: 1rem;
+  padding: 1rem;
+  padding-bottom: 0;
 `;
 
 const HeaderInputWrapper = styled.div`
@@ -33,7 +30,10 @@ const TokenWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  padding-top: 64px; // header height
+  padding: 0 .75rem;
+  padding-top: 92px; // header height
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const PageHeader = styled.div`
@@ -43,8 +43,8 @@ const PageHeader = styled.div`
   margin: auto;
   margin-bottom: 1rem;
   width: 80%;
-  max-width: 800px;
-  min-width: 400px;
+  max-width: 500px;
+  min-width: 250px;
 `;
 
 export default function GitHubRepositoriesPage() {
@@ -99,27 +99,25 @@ export default function GitHubRepositoriesPage() {
   return (
     <>
       {contextHolder}
-      <PageWrapper>
-        <HeaderWrapper>
-          <PageHeader>
-            <HeaderInputWrapper>
-              <TokenWrapper>
-                <TokenManagement onSave={onTokenChanges}></TokenManagement>
-              </TokenWrapper>
-              <DebounceSearchInput commit={search} placeholder="Search by repository name"></DebounceSearchInput>
-            </HeaderInputWrapper>
-            <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
-          </PageHeader>
-        </HeaderWrapper>
-        <ContentWrapper>
-          <If
-            condition={!loading}
-            else={<Spin size="large" />}
-          >
-            <GitHubRepositories items={error ? [] : (data?.repos || [])}></GitHubRepositories>
-          </If>
-        </ContentWrapper>
-      </PageWrapper>
+      <HeaderWrapper>
+        <PageHeader>
+          <HeaderInputWrapper>
+            <TokenWrapper>
+              <TokenManagement onSave={onTokenChanges}></TokenManagement>
+            </TokenWrapper>
+            <DebounceSearchInput commit={search} placeholder="Search by repository name"></DebounceSearchInput>
+          </HeaderInputWrapper>
+          <UnknownSizePagination onNext={loadNextPage} onPrev={loadPrevPage} pageInfo={data.pageInfo}/>
+        </PageHeader>
+      </HeaderWrapper>
+      <ContentWrapper>
+        <If
+          condition={!loading}
+          else={<Spin size="large" />}
+        >
+          <GitHubRepositories items={error ? [] : (data?.repos || [])}></GitHubRepositories>
+        </If>
+      </ContentWrapper>
     </>
   );
 }
